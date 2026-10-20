@@ -1,0 +1,8 @@
+[submodule "openembedded-core"]
+	path = openembedded-core
+	url = https://git.openembedded.org/openembedded-core.git
+	branch = wrynose
+[submodule "bitbake"]
+	path = bitbake
+	url = https://git.openembedded.org/bitbake.git
+	branch = 2.18

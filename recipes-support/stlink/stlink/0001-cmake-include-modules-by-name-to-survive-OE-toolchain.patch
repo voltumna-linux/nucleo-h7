@@ -1,0 +1,75 @@
+From b46a481f38879d5d01639eefb7e50d2048360fb3 Mon Sep 17 00:00:00 2001
+From: oe <oe@local>
+Date: Wed, 21 Oct 2026 19:34:37 +0200
+Subject: [PATCH] cmake: include modules by name so toolchain-appended
+ CMAKE_MODULE_PATH is preserved
+
+Upstream-Status: Pending
+---
+ CMakeLists.txt                 | 4 ++--
+ cmake/packaging/CMakeLists.txt | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6a11bc0..b46ef83 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -19,21 +19,21 @@ set(CMAKE_C_STANDARD 17)
+ set(CMAKE_C_STANDARD_REQUIRED ON)
+ set(CMAKE_C_EXTENSIONS ON)
+ 
+ 
+ ###
+ # General Project Settings
+ ###
+ 
+ project(stlink C)
+ set(PROJECT_DESCRIPTION "Open source version of the STMicroelectronics ST-LINK Tools")
+-include(${CMAKE_MODULE_PATH}/get_version.cmake) # Determine project version
++include(get_version) # Determine project version
+ 
+ include(GNUInstallDirs) # Define GNU standard installation directories
+ 
+ ## Include test execution for test-targets for target Debug
+ if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+     include(CTest)
+ endif()
+ 
+ # Check operating system
+ cmake_host_system_information(RESULT OS_NAME QUERY OS_NAME)
+@@ -50,21 +50,21 @@ if (WIN32)
+     # -pthread, restoring the libwinpthread-1.dll dependency.
+     set(STLINK_THREAD_LIBRARY "")
+ else ()
+     set(THREADS_PREFER_PTHREAD_FLAG ON)
+     find_package(Threads REQUIRED)
+     set(STLINK_THREAD_LIBRARY Threads::Threads)
+ endif()
+ 
+ # Set C build flags
+ if (NOT MSVC)
+-    include(${CMAKE_MODULE_PATH}/c_flags.cmake)
++    include(c_flags)
+ endif()
+ # MSVC runtime selection is left to CMAKE_MSVC_RUNTIME_LIBRARY/the toolchain.
+ 
+ 
+ ###
+ # Dependencies
+ ###
+ 
+ # Set source and header file variables
+ set(STLINK_HEADERS)
+diff --git a/cmake/packaging/CMakeLists.txt b/cmake/packaging/CMakeLists.txt
+index cbf6e1d..376f34a 100644
+--- a/cmake/packaging/CMakeLists.txt
++++ b/cmake/packaging/CMakeLists.txt
+@@ -1,4 +1,4 @@
+ add_subdirectory(deb)
+ add_subdirectory(rpm)
+ 
+-include(${CMAKE_MODULE_PATH}/cpack_config.cmake)
++include(cpack_config)
+-- 
+2.43.0
+
